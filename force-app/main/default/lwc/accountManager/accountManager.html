@@ -1,0 +1,66 @@
+<template>
+    <lightning-card title="Manage Accounts" icon-name="standard:account">
+
+        <lightning-spinner if:true={isLoading} alternative-text="Loading"></lightning-spinner> 
+
+        <lightning-layout vertical-align="center">
+            <lightning-layout-item padding="around-small" size="4">
+                <lightning-input 
+                    label="Search Accounts"
+                    variant="label-hidden" 
+                    type="search" 
+                    placeholder="Search name..."
+                    onchange={handleSearchKeyChange}>
+                </lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <lightning-button variant="brand" onclick={handleSearch} label="Search"></lightning-button>
+                <lightning-button variant="brand-outline" onclick={handleNew} class="slds-p-left_x-small" label="New"></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+        
+        <div class="slds-p-around_medium">
+            <table class="slds-table slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">NAME</th>
+                        <th scope="col">PHONE</th>
+                        <th scope="col">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={listAccount} for:item="item">
+                        <tr key={item.Id} class="slds-hint-parent">
+                            <td>{item.Name}</td>
+                            <td>{item.Phone}</td>
+                            <td>
+                                <lightning-button-icon icon-name="utility:edit" onclick={handleEdit} data-id={item.Id} title="Edit"></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:delete" onclick={handleDeleteConfirm} data-id={item.Id} class="slds-m-left_xx-small" title="Delete"></lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        
+        <template if:true={showEditModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Edit Account</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input label="Name" value={editObject.Name} data-field="Name" onchange={handleInputChange}></lightning-input>
+                        <lightning-input label="Phone" value={editObject.Phone} data-field="Phone" onchange={handleInputChange}></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeModals} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        
+    </lightning-card>
+</template>
